@@ -1,7 +1,5 @@
 module NetFlix
   class Credentials < Valuable
-
-    CONFIG_FILENAME = Rails.root.join('config', 'credentials.yml')
     
     has_value :key
     has_value :secret
@@ -14,17 +12,17 @@ module NetFlix
     class << self
 
       def from_file
-        new(config_file_exists? ? YAML.load(File.open(CONFIG_FILENAME)) : {}) 
+        new(config_file_exists? ? YAML.load(File.open(Rails.root.join('config', 'credentials.yml'))) : {}) 
       end
 
       def config_file_exists?
-        File.exist? CONFIG_FILENAME
+        File.exist? Rails.root.join('config', 'credentials.yml')
       end
 
     end # class methods
 
     def to_file!
-      credentials_store = File.new(CONFIG_FILENAME, 'w')
+      credentials_store = File.new(Rails.root.join('config', 'credentials.yml'), 'w')
       credentials_store.puts(self.to_yaml)
       credentials_store.close
     end
